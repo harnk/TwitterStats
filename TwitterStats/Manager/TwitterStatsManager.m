@@ -20,16 +20,18 @@
     _isTryingToConnect = NO;
     
     // Start the streaming connection
-    [self initStreamingConnectionForPattern:@""];
+    [self initStreamingConnection];
     
     self.tweetCount = 0;
+    self.tweetContainsURLCount = 0;
+    [self startUpdateTimer];
     
 }
 
 #pragma mark - Connection setup
 
 
-- (void)initStreamingConnectionForPattern:(NSString *)aKeyword {
+- (void)initStreamingConnection {
     
     //  Check that the user has local Twitter accounts
     if ([self userHasAccessToTwitter]) {
@@ -62,7 +64,7 @@
                                                     
                                                     //                                                    NSURL *url = [NSURL URLWithString:@"https://stream.twitter.com/1.1/statuses/filter.json"];
                                                     NSURL *url = [NSURL URLWithString:@"https://stream.twitter.com/1.1/statuses/sample.json"];
-                                                    NSDictionary *params = @{@"track" : aKeyword};
+//                                                    NSDictionary *params = @{@"track" : aKeyword};
                                                     
 //                                                    SLRequest *request = [SLRequest requestForServiceType:SLServiceTypeTwitter
 //                                                                                            requestMethod:SLRequestMethodPOST
@@ -103,9 +105,6 @@
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
     
-//    NSLog(@"didReceiveData!!!!!");
-    
-    // If we receive the data
     if (data) {
         
         // The stream is running
@@ -118,18 +117,34 @@
         }
         
         // Invoke the parser and get the tweets
-        NSDictionary *tweets = nil;
+        NSDictionary *tweet = nil;
         TwitterStatsParser *parser = [[TwitterStatsParser alloc] init];
         parser.delegate = self;
-        tweets = [parser getTweetsFromData:data];
-//        NSLog(@"count:%lu ", (unsigned long)[tweets count]);
-        if ([tweets count] > 1){
-            // one element tweet arrays are always a deleted tweet so skip those
-            self.tweetCount = self.tweetCount + (100 * [tweets count]);
-            NSLog(@"Tweet count:%lu ", (unsigned long)self.tweetCount);
+        tweet = [parser getTweetFromData:data];
+        
+        if ([tweet count] > 1){ //skip deleted tweets
+            self.tweetCount++;
+//            NSLog(@"tweet[text]: %@", tweet[@"text"]);
+            NSString *tweetText = tweet[@"text"];
+            if ([tweetText rangeOfString:@"https://"].location == NSNotFound) {
+//                NSLog(@"tweetText does not contain url");
+            } else {
+                self.tweetContainsURLCount++;
+            }
+
         }
+        
+//        NSLog(@"Tweet count:%lu ", (unsigned long)self.tweetCount);
+        
     }
 }
+
+-(void)connection:(NSURLConnection *)connection didReceiveResponse:(nonnull NSURLResponse *)response {
+    NSHTTPURLResponse *HTTPResponse = (NSHTTPURLResponse *)response;
+    NSInteger statusCode = [HTTPResponse statusCode];
+    NSLog(@"connection didReceiveResponse statusCode:%lu", (long)statusCode);
+}
+
 
 // If the connection fails, try to reconnect in 10 seconds
 -(void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
@@ -145,11 +160,47 @@
     
     // The stream is closed, so we need to create a new stream from the ground up
     // We wait 5 second to avoid overloading the server
-    [self performSelector:@selector(initStreamingConnectionForPattern:) withObject:@"" afterDelay:5];
+    [self performSelector:@selector(initStreamingConnection) withObject:nil afterDelay:5];
 }
 
-#pragma mark - TSTwitterParserDelegate
+#pragma mark - Update Timer Handlers
 
+- (void)startUpdateTimer {
+    //Set up a timer to send updates to the UI every 2 seconds
+    if (!self.updateTimer) {
+        self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:2.0f
+                                                      target:self
+                                                    selector:@selector(sendUpdates)
+                                                    userInfo:nil
+                                                     repeats:YES];
+    }
+}
+
+- (void)killUpdateTimer {
+    // Kill the update timer
+    if (self.updateTimer) {
+        [self.updateTimer invalidate];
+        self.updateTimer = nil;
+    }
+}
+
+-(void) sendUpdates {
+    
+    NSString *strFromIntTotal = [NSString stringWithFormat:@"%d",self.tweetCount];
+    
+    float tc =  [[NSNumber numberWithInt: self.tweetCount] floatValue];
+    float tcu =  [[NSNumber numberWithInt: self.tweetContainsURLCount] floatValue];
+    float percentURLsInTweet = 100 * (tcu / tc);
+    NSString *strFromFloat = [NSString stringWithFormat:@"%.3f", percentURLsInTweet];
+    
+    NSLog(@"self.tweetCount:%d self.self.tweetContainsURLCount:%d percentURLsInTweet:%f",self.tweetCount, self.tweetContainsURLCount, percentURLsInTweet);
+    NSDictionary *dict = @{@"total" : strFromIntTotal, @"percentUrls" : strFromFloat};
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"dataChanged" object:self userInfo:dict];
+    
+}
+
+
+#pragma mark - TSTwitterParserDelegate
 
 - (void)parsingTweetsFailedWithError:(NSError *)error {
     // tbd try again

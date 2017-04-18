@@ -9,8 +9,14 @@
 #import <Foundation/Foundation.h>
 #import <Social/Social.h>
 #import <Accounts/Accounts.h>
-#import "TwitterStatsManagerDelegate.h"
-#import "TwitterStatsParserDelegate.h"
+#import "TwitterStatsParser.h"
+
+@protocol TwitterStatsManagerDelegate <NSObject>
+
+-(void)fetchingTweetsFailedWithError:(NSString *)error;
+-(void)reconnectedToStream;
+
+@end
 
 
 @interface TwitterStatsManager : NSObject <TwitterStatsParserDelegate>
@@ -18,9 +24,11 @@
 @property (nonatomic, assign) BOOL isConnected;
 @property (nonatomic, assign) BOOL isTryingToConnect;
 @property (nonatomic, assign) int tweetCount;
+@property (nonatomic, assign) int tweetContainsURLCount;
+@property (strong, nonatomic) NSTimer *updateTimer;
 @property (nonatomic, weak) id<TwitterStatsManagerDelegate> delegate;
 
 -(void)initManager;
--(void)initStreamingConnectionForPattern:(NSString *)aKeyword;
+-(void)initStreamingConnection;
 
 @end

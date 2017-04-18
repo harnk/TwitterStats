@@ -14,8 +14,7 @@
 
 @implementation TwitterStatsViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
@@ -28,8 +27,17 @@
     // Do any additional setup after loading the view, typically from a nib.
 }
 
-- (void)viewDidAppear:(BOOL)animated
-{
+- (void)viewWillAppear:(BOOL)animated {
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(updateLabels:)
+                                                 name:@"dataChanged"
+                                               object:nil];
+
+    
+}
+
+- (void)viewDidAppear:(BOOL)animated {
     if (![SLComposeViewController isAvailableForServiceType:SLServiceTypeTwitter])
     {
         NSLog(@"unavailable -- isAvailableForServiceType");
@@ -37,6 +45,14 @@
         [self presentViewController:twitterSignInDialog animated:NO completion:nil];
     }
     
+    self.totalReceivedLabel.text = @"0";
+    
+}
+
+- (void)updateLabels:(NSNotification *)notification {
+//    int total = [[notification valueForKey:@"total"] intValue];
+    self.totalReceivedLabel.text = [notification.userInfo objectForKey:@"total"];
+    self.percentContainingURLLabel.text = [notification.userInfo objectForKey:@"percentUrls"];
 }
 
 - (void)didReceiveMemoryWarning {

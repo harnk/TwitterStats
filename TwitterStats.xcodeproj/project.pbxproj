@@ -15,7 +15,6 @@
 		D648AC051EA58EBA0099FE90 /* TwitterStatsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = D648AC041EA58EBA0099FE90 /* TwitterStatsManager.m */; };
 		D648AC081EA593300099FE90 /* TwitterStatsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D648AC071EA593300099FE90 /* TwitterStatsViewController.m */; };
 		D648AC0F1EA595F50099FE90 /* TwitterStatsParser.m in Sources */ = {isa = PBXBuildFile; fileRef = D648AC0E1EA595F50099FE90 /* TwitterStatsParser.m */; };
-		D648AC131EA5999F0099FE90 /* TSTweet.m in Sources */ = {isa = PBXBuildFile; fileRef = D648AC121EA5999F0099FE90 /* TSTweet.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,12 +30,8 @@
 		D648AC041EA58EBA0099FE90 /* TwitterStatsManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TwitterStatsManager.m; path = Manager/TwitterStatsManager.m; sourceTree = "<group>"; };
 		D648AC061EA593300099FE90 /* TwitterStatsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TwitterStatsViewController.h; sourceTree = "<group>"; };
 		D648AC071EA593300099FE90 /* TwitterStatsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TwitterStatsViewController.m; sourceTree = "<group>"; };
-		D648AC0C1EA595110099FE90 /* TwitterStatsManagerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TwitterStatsManagerDelegate.h; path = Manager/TwitterStatsManagerDelegate.h; sourceTree = "<group>"; };
 		D648AC0D1EA595F50099FE90 /* TwitterStatsParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TwitterStatsParser.h; path = Parser/TwitterStatsParser.h; sourceTree = "<group>"; };
 		D648AC0E1EA595F50099FE90 /* TwitterStatsParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TwitterStatsParser.m; path = Parser/TwitterStatsParser.m; sourceTree = "<group>"; };
-		D648AC101EA5985E0099FE90 /* TwitterStatsParserDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TwitterStatsParserDelegate.h; path = Parser/TwitterStatsParserDelegate.h; sourceTree = "<group>"; };
-		D648AC111EA5999F0099FE90 /* TSTweet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSTweet.h; path = Model/TSTweet.h; sourceTree = "<group>"; };
-		D648AC121EA5999F0099FE90 /* TSTweet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSTweet.m; path = Model/TSTweet.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,7 +66,6 @@
 			children = (
 				D648AC021EA58C000099FE90 /* Parser */,
 				D648AC011EA58BF70099FE90 /* Manager */,
-				D648AC001EA58BEE0099FE90 /* Model */,
 				D648AC181EA5A25A0099FE90 /* ViewControllers */,
 				D648ABEC1EA58B590099FE90 /* AppDelegate.h */,
 				D648ABED1EA58B590099FE90 /* AppDelegate.m */,
@@ -92,21 +86,11 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		D648AC001EA58BEE0099FE90 /* Model */ = {
-			isa = PBXGroup;
-			children = (
-				D648AC111EA5999F0099FE90 /* TSTweet.h */,
-				D648AC121EA5999F0099FE90 /* TSTweet.m */,
-			);
-			name = Model;
-			sourceTree = "<group>";
-		};
 		D648AC011EA58BF70099FE90 /* Manager */ = {
 			isa = PBXGroup;
 			children = (
 				D648AC031EA58EBA0099FE90 /* TwitterStatsManager.h */,
 				D648AC041EA58EBA0099FE90 /* TwitterStatsManager.m */,
-				D648AC0C1EA595110099FE90 /* TwitterStatsManagerDelegate.h */,
 			);
 			name = Manager;
 			sourceTree = "<group>";
@@ -116,7 +100,6 @@
 			children = (
 				D648AC0D1EA595F50099FE90 /* TwitterStatsParser.h */,
 				D648AC0E1EA595F50099FE90 /* TwitterStatsParser.m */,
-				D648AC101EA5985E0099FE90 /* TwitterStatsParserDelegate.h */,
 			);
 			name = Parser;
 			sourceTree = "<group>";
@@ -206,7 +189,6 @@
 				D648AC051EA58EBA0099FE90 /* TwitterStatsManager.m in Sources */,
 				D648ABEE1EA58B590099FE90 /* AppDelegate.m in Sources */,
 				D648ABEB1EA58B590099FE90 /* main.m in Sources */,
-				D648AC131EA5999F0099FE90 /* TSTweet.m in Sources */,
 				D648AC081EA593300099FE90 /* TwitterStatsViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -366,6 +348,7 @@
 				D648ABFF1EA58B590099FE90 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

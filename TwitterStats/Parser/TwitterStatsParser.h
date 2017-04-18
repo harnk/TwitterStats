@@ -7,12 +7,18 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "TwitterStatsParserDelegate.h"
+
+@protocol TwitterStatsParserDelegate <NSObject>
+@required
+// Invoked when the parser fails
+- (void)parsingTweetsFailedWithError:(NSError *)error;
+
+@end
 
 @interface TwitterStatsParser : NSObject
 
 @property (nonatomic, weak) id<TwitterStatsParserDelegate> delegate;
 
-- (NSDictionary *)getTweetsFromData:(NSData *)data;
+- (NSDictionary *)getTweetFromData:(NSData *)data;
 
 @end

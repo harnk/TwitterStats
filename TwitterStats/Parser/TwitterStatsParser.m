@@ -10,11 +10,11 @@
 
 @implementation TwitterStatsParser
 
-- (NSDictionary *)getTweetsFromData:(NSData *)data {
+- (NSDictionary *)getTweetFromData:(NSData *)data {
     
     // Uses the NSJSONSerialization class for parsing
     NSError *error = nil;
-    NSDictionary *tweetsArray = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
+    NSDictionary *tweetArray = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
     
     // Tell the delegate if something fails
     if (error) {
@@ -22,9 +22,9 @@
         return nil;
     }
     
-    //    NSLog(@"tweetsArray:%@", tweetsArray);
-    //    NSLog(@"count:%lu tweetsArray:%@", (unsigned long)[tweetsArray count], tweetsArray);
-    return tweetsArray;
+//    NSLog(@"tweetsArray:%@", tweetArray);
+//    NSLog(@"tweetArray[id_str]: %@", tweetArray[@"id_str"]);
+    return tweetArray;
 }
 
 
